@@ -30,6 +30,7 @@ export class FrParserStack extends cdk.Stack {
         super(scope, id, props);
 
         const siteEndpoint = cdk.Fn.importValue(stageConfig.getResourceName('api-endpoint'));
+        const workerTimeoutSeconds = props.lambdaConfig.timeout;
 
         const deadLetterQueue = new sqs.Queue(this, 'FrParserDeadLetterQueue', {
             queueName: stageConfig.getResourceName('fr-parser-dlq'),
@@ -38,7 +39,8 @@ export class FrParserStack extends cdk.Stack {
 
         const queue = new sqs.Queue(this, 'FrParserQueue', {
             queueName: stageConfig.getResourceName('fr-parser-queue'),
-            visibilityTimeout: cdk.Duration.seconds(900),
+            // Leave SQS enough time to avoid redelivery while the worker is running.
+            visibilityTimeout: cdk.Duration.seconds(workerTimeoutSeconds * 6),
             retentionPeriod: cdk.Duration.days(14),
             deadLetterQueue: {
                 queue: deadLetterQueue,
@@ -63,7 +65,7 @@ export class FrParserStack extends cdk.Stack {
                 cmd: ['app.app.handler'],
             }),
             memorySize: props.lambdaConfig.memorySize,
-            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
+            timeout: cdk.Duration.seconds(workerTimeoutSeconds),
             environment: {
                 EREGS_API_URL_V3: `${siteEndpoint}v3/`,
                 EREGS_AUTH_SECRET_NAME: props.environmentConfig.authSecretName,
@@ -77,7 +79,7 @@ export class FrParserStack extends cdk.Stack {
                 cmd: ['app.app.handler'],
             }),
             memorySize: props.lambdaConfig.memorySize,
-            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
+            timeout: cdk.Duration.seconds(workerTimeoutSeconds),
             environment: {
                 EREGS_API_URL_V3: `${siteEndpoint}v3/`,
                 EREGS_AUTH_SECRET_NAME: props.environmentConfig.authSecretName,

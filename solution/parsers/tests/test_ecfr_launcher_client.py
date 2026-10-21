@@ -64,11 +64,12 @@ class EcfrLauncherClientTests(unittest.TestCase):
         result = _module.update_ecfr_launcher_result(
             api_base_url="https://example.local/v3/",
             credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
+            result_id=1,
             payload={"success": True, "log": "queued=2 skipped=1"},
         )
 
         self.assertEqual(result["log"], "queued=2 skipped=1")
-        self.assertTrue(mock_patch.call_args.args[0].endswith("/parsers/ecfr/launcher-results"))
+        self.assertTrue(mock_patch.call_args.args[0].endswith("/parsers/ecfr/launcher-results/1"))
 
     @patch("requests.patch")
     def test_update_ecfr_launcher_result_non_2xx(self, mock_patch):
@@ -80,6 +81,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
             _module.update_ecfr_launcher_result(
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
+                result_id=1,
                 payload={"success": True, "log": "queued=2 skipped=1"},
             )
 

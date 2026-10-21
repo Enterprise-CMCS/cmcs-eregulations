@@ -35,6 +35,7 @@ def _payload(**overrides):
             "docket_numbers": ["ABC-1", "DEF-2"],
             "raw_text_url": "https://example/x.txt",
             "full_text_xml_url": "https://example/x.xml",
+            "configured_titles": [42, 45],
             "log_level": "warn",
         }
     }
@@ -58,6 +59,7 @@ class FrWorkerConfigTests(unittest.TestCase):
         self.assertEqual(parsed.docket_numbers, ["ABC-1", "DEF-2"])
         self.assertEqual(parsed.raw_text_url, "https://example/x.txt")
         self.assertEqual(parsed.full_text_xml_url, "https://example/x.xml")
+        self.assertEqual(parsed.configured_titles, [42, 45])
         self.assertEqual(parsed.log_level, "WARNING")
         self.assertEqual(parsed.credentials, BackendCredentials("basic", "env-user", "env-pass", None))
 
@@ -101,6 +103,11 @@ class FrWorkerConfigTests(unittest.TestCase):
         with patch.dict("os.environ", {"EREGS_USERNAME": "u", "EREGS_PASSWORD": "p"}, clear=True):
             with self.assertRaises(ConfigParseError):
                 parse_config(_payload(raw_text_url=""))
+
+    def test_parse_config_rejects_invalid_configured_titles(self):
+        with patch.dict("os.environ", {"EREGS_USERNAME": "u", "EREGS_PASSWORD": "p"}, clear=True):
+            with self.assertRaisesRegex(ConfigParseError, "configured_titles"):
+                parse_config(_payload(configured_titles=[42, "45"]))
 
 
 if __name__ == "__main__":

@@ -21,6 +21,7 @@ from common.auth import SettingsAuthentication
 from common.aws import establish_client
 from common.constants import QUOTE_TYPES
 from common.exceptions import ServiceUnavailable
+from regcore.models import Part
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from resources.models import (
     AbstractCategory,
@@ -250,6 +251,10 @@ class ContentSearchMixin:
             q_filter &= ~Q(resource__abstractinternalresource__isnull=False)
         if not show_regulations:
             q_filter &= ~Q(reg_text__isnull=False)
+        q_filter &= (
+            Q(reg_text__isnull=True)
+            | Q(reg_text__retired_at__isnull=True, reg_text__date=F("reg_text__part__date"))
+        )
 
         # Convert the queryset to raw SQL while preserving safe parameterization
         query_object = ContentIndex.objects.filter(q_filter).only("id").query
@@ -625,6 +630,8 @@ class ResourceChunkUpdateViewSet(viewsets.ViewSet):
 
         # Get data from the request body
         resource_id = data["id"]
+        if int(kwargs["pk"]) != resource_id:
+            raise BadRequest("Resource ID does not match the callback URL.")
         chunk_index = data["chunk_index"]
         total_chunks = data["total_chunks"]
         file_type = data["file_type"]
@@ -694,6 +701,8 @@ class RegTextChunkUpdateViewSet(viewsets.ViewSet):
 
         # Get data from the request body
         reg_text_id = data["id"]
+        if int(kwargs["pk"]) != reg_text_id:
+            raise BadRequest("Reg text metadata ID does not match the callback URL.")
         chunk_index = data["chunk_index"]
         total_chunks = data["total_chunks"]
         text = data["text"]
@@ -701,9 +710,18 @@ class RegTextChunkUpdateViewSet(viewsets.ViewSet):
 
         # Retrieve reg text metadata (and ensure it exists, otherwise fail)
         try:
-            reg_text = IndexedRegulationText.objects.get(pk=reg_text_id)
+            metadata = IndexedRegulationText.objects.get(pk=reg_text_id)
         except IndexedRegulationText.DoesNotExist:
             raise BadRequest(f"Reg text metadata object with id {reg_text_id} does not exist.")
+
+        try:
+            part = Part.objects.select_for_update().get(pk=metadata.part_id)
+            reg_text = IndexedRegulationText.objects.select_for_update().get(pk=reg_text_id)
+        except (IndexedRegulationText.DoesNotExist, Part.DoesNotExist):
+            return Response(status=204)
+
+        if reg_text.retired_at is not None or reg_text.date != part.date:
+            return Response(status=204)
 
         # Delete any extra chunks that may exist beyond the new total_chunks value
         deleted, _ = ContentIndex.objects.filter(Q(reg_text=reg_text) & Q(chunk_index__gte=total_chunks)).delete()

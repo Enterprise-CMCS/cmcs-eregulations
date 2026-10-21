@@ -241,6 +241,7 @@ If you are iterating on only Python source (no Dockerfile/dependency changes), `
 - Launchers resolve log level from parser config and include it in worker work units.
 - FR dedupe is controlled by parser config (`skip_fr_documents`) using existing `document_number` values in eRegs.
 - FR section-link extraction is non-fatal: a document still uploads even if link extraction fails.
+- FR work units include all enabled FR target titles so the worker preserves cross-title CFR section links from the Go parser behavior.
 
 Additional contracts to keep in mind:
 

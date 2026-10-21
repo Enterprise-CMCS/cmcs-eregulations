@@ -69,6 +69,7 @@ def _build_work_units(
     """
 
     targets = expand_fr_targets(parser_config, ecfr_base_url=ecfr_api_base_url)
+    configured_titles = sorted({target.title_number for target in targets})
     skip_fr_documents = _resolve_skip_fr_documents(parser_config)
     existing: set[str] = set()
     if skip_fr_documents:
@@ -82,12 +83,17 @@ def _build_work_units(
             if skip_fr_documents and doc.document_number in existing:
                 skipped_count += 1
                 continue
-            work_units.append(_build_work_unit(doc, target, parser_log_level))
+            work_units.append(_build_work_unit(doc, target, parser_log_level, configured_titles))
 
     return work_units, skipped_count
 
 
-def _build_work_unit(doc: FrDoc, target: FrTarget, parser_log_level: str) -> dict[str, Any]:
+def _build_work_unit(
+    doc: FrDoc,
+    target: FrTarget,
+    parser_log_level: str,
+    configured_titles: list[int],
+) -> dict[str, Any]:
     """Build a single worker message from one FR document."""
 
     return {
@@ -103,6 +109,7 @@ def _build_work_unit(doc: FrDoc, target: FrTarget, parser_log_level: str) -> dic
             "docket_numbers": doc.docket_numbers,
             "raw_text_url": doc.raw_text_url,
             "full_text_xml_url": doc.full_text_url,
+            "configured_titles": configured_titles,
             "log_level": parser_log_level,
         }
     }

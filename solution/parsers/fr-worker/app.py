@@ -44,7 +44,7 @@ def _extract_linked_sections(config: FrDocumentConfig) -> tuple[list, list]:
     )
     sections, section_ranges, part_map = fetch_full_text_sections(
         config.full_text_xml_url,
-        titles={str(config.title)},
+        titles={str(title) for title in config.configured_titles},
     )
     logger.debug(
         "Extracted section tokens: %s, range tokens: %s, part map keys: %s",

@@ -1,6 +1,6 @@
 from django.apps import apps
 from django.contrib import admin, messages
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.forms import TextInput
 from django.utils import timezone
@@ -50,36 +50,66 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
         ),
     )
 
+    @staticmethod
+    def _part_query(target):
+        """Build a query for Parts covered by one saved configuration target."""
+
+        title, configuration_type, value = target
+        if configuration_type == "part":
+            return Q(title=title, name=value)
+
+        if configuration_type == "subchapter":
+            chapter, subchapter = value.split("-", 1)
+            return Q(
+                title=title,
+                structure__children__0__type="chapter",
+                structure__children__0__identifier=[chapter],
+                structure__children__0__children__0__type="subchapter",
+                structure__children__0__children__0__identifier=[subchapter],
+            )
+
+        return Q(pk__in=[])
+
+    @classmethod
+    def _combined_part_query(cls, configurations):
+        query = None
+        for target in configurations:
+            target_query = cls._part_query(target)
+            query = target_query if query is None else query | target_query
+        return query
+
+    @staticmethod
+    def _configuration_target(configuration):
+        return configuration.title, configuration.type, configuration.value
+
+    @transaction.atomic
     def save_formset(self, request, form, formset, change):
-        formset.save(commit=False)
+        previous_targets = [
+            self._configuration_target(configuration)
+            for configuration in formset.get_queryset()
+        ]
+        super().save_formset(request, form, formset, change)
 
-        # Generate a filter to find all affected parts
-        q = Q()
-        has_part_config_deletes = False
-        for obj in [i for i in formset.deleted_objects if isinstance(i, PartConfiguration)]:
-            has_part_config_deletes = True
-            if obj.type == "part":
-                q |= Q(title=obj.title, name=obj.value)  # Direct part match
-            elif obj.type == "subchapter":
-                # Find all parts under this subchapter
-                chapter, subchapter = obj.value.split("-")
-                exclude = list(PartConfiguration.objects.filter(title=obj.title, type="part").values_list("value", flat=True))
-                q |= (
-                    Q(
-                        title=obj.title,
-                        structure__children__0__type="chapter",
-                        structure__children__0__identifier=[chapter],
-                        structure__children__0__children__0__type="subchapter",
-                        structure__children__0__children__0__identifier=[subchapter],
-                    )
-                    & ~Q(name__in=exclude)
-                )
-
-        if not has_part_config_deletes or not q.children:
-            super().save_formset(request, form, formset, change)
+        if not previous_targets:
             return
 
-        affected_parts = Part.objects.filter(q).distinct()
+        final_configurations = list(
+            PartConfiguration.objects.filter(parser_config_id=form.instance.pk)
+        )
+        final_targets = {
+            configuration.pk: self._configuration_target(configuration)
+            for configuration in final_configurations
+        }
+        previous_query = self._combined_part_query(previous_targets)
+        if previous_query is None:
+            return
+
+        candidate_parts = Part.objects.filter(previous_query).distinct()
+        final_query = self._combined_part_query(final_targets.values())
+        affected_parts = candidate_parts
+        if final_query is not None:
+            affected_parts = affected_parts.exclude(final_query).distinct()
+
         if affected_parts.exists():
             part_pairs = list(affected_parts.values_list("title", "name").distinct())
             result_filter = Q()
@@ -116,8 +146,6 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
                 message,
                 level=messages.INFO,
             )
-
-        super().save_formset(request, form, formset, change)
 
 
 class _ParserResultAdminBase(admin.ModelAdmin):

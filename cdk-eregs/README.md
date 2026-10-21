@@ -104,7 +104,7 @@ The site Lambda receives these resource names through custom environment variabl
 
 The CDK stack supplies the values shown above by default. If the resource names are customized, update the corresponding CDK values and IAM resource permissions together so the Lambda can read the configured resources.
 
-For local development, `ADMIN_LOGIN_LOCAL_OVERRIDE` defaults to `true`. Set it to `false` to exercise the disabled behavior without AWS access.
+For local development and tests, `ADMIN_LOGIN_ENABLED_OVERRIDE` defaults to `true`. Set it to `false` to exercise the disabled behavior without AWS access. Ephemeral CDK environments set this variable to `true` automatically so their admin credential-login page is available; shared dev, validation, and production environments continue to use the SSM-controlled setting.
 
 ## Best Practices
 - Use ephemeral environments for testing PRs to avoid impacting shared resources.

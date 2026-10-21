@@ -79,6 +79,7 @@ class FrLauncherAppTests(unittest.TestCase):
         cfg = work_units[0]["config"]
         self.assertEqual(cfg["title"], 42)
         self.assertEqual(cfg["part"], "400")
+        self.assertEqual(cfg["configured_titles"], [42])
         self.assertEqual(cfg["log_level"], "INFO")
 
     def test_build_work_units_dedupes_when_skip_fr_documents(self):

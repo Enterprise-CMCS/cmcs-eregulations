@@ -121,6 +121,32 @@ class EcfrLauncherConfigTests(unittest.TestCase):
             base_url=_module.ECFR_V1_BASE_URL,
         )
 
+    @patch.object(_module, "fetch_subchapter_part_numbers", return_value=[400])
+    def test_expand_target_parts_merges_overlapping_flags(self, mock_fetch):
+        parser_config = {
+            "parts": [
+                {
+                    "title": 42,
+                    "type": "part",
+                    "value": "400",
+                    "upload_reg_text": True,
+                    "upload_locations": False,
+                },
+                {
+                    "title": 42,
+                    "type": "subchapter",
+                    "value": "IV-C",
+                    "upload_reg_text": False,
+                    "upload_locations": True,
+                },
+            ]
+        }
+
+        targets = expand_target_parts(parser_config)
+
+        self.assertEqual(targets, [TargetPartConfig(42, 400, True, True)])
+        mock_fetch.assert_called_once()
+
     def test_expand_target_parts_invalid_subchapter_value(self):
         parser_config = {
             "parts": [

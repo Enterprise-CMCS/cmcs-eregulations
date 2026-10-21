@@ -96,14 +96,18 @@ local: regulations local.docker data.local
 
 local.docker: ## Start a local environment
 local.docker:
-	docker compose up -d; \
-		sleep 5; \
-		make local.regulations;
+	$(MAKE) local.reset-regulations && \
+		sleep 5 && \
+		$(MAKE) local.regulations
 
 local.regulations: ## Run migrations and restart the regulations-core
 	docker compose exec regulations uv run python manage.py migrate; \
 		docker compose restart regulations; \
 		sleep 5;
+
+local.reset-regulations: ## Recreate the local Compose stack without deleting volumes
+	docker compose down --remove-orphans && \
+		DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.local" docker compose up -d
 local.spectacular: ## Run swagger locally
 	docker compose exec regulations uv run python manage.py spectacular --file schema.yaml
 %.prod: ## Load a Part of Title 42. e.g. make data.prod.435 will load Part 435 into prod
@@ -127,7 +131,7 @@ local.stop: ## Stop the local environment, freeing up resources and ports withou
 	docker compose stop
 
 local.start: ## Start the local environment if stopped using `make local.stop`
-	docker compose start
+	$(MAKE) local.reset-regulations
 
 local.clean: ## Remove the local environment entirely.
 	docker compose down --remove-orphans --volumes
@@ -142,8 +146,10 @@ local.opensearch: ## Run a local opensearch environment
 	docker compose -f docker-compose.opensearch.yml up -d
 
 test.cypress: ## run the cypress e2e suite
-	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml  -f docker-compose.e2e.yml up e2e
-	docker compose -f docker-compose.yml up -d ## resets the django_settings_module to the default
+	trap '$(MAKE) local.reset-regulations' EXIT; \
+		docker compose down --remove-orphans && \
+		DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml -f docker-compose.e2e.yml up -d regulations; \
+		DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml -f docker-compose.e2e.yml up e2e
 test.cypress.local: ## run cypress tests locally without docker
 	cd ui/e2e; \
 		npm install; \
@@ -164,14 +170,12 @@ test.vitest.ui:
 
 ##uncomment the -vvv if there are errors running pytest.
 test.pytest:
-	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml up -d
-	docker compose exec regulations uv run pytest -v
-	docker compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
+	$(MAKE) local.reset-regulations && \
+		docker compose exec -e DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" regulations uv run pytest -v
 
 test.pytest.cov:
-	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml up -d
-	docker compose exec regulations uv run pytest --cov
-	docker compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
+	$(MAKE) local.reset-regulations && \
+		docker compose exec -e DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" regulations uv run pytest --cov
 
 python.shell:
 	docker compose exec regulations uv run python manage.py shell

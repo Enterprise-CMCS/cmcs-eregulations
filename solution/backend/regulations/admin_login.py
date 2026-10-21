@@ -19,9 +19,9 @@ _cached_cypress_token = None
 def is_admin_login_enabled(request):
     """Return whether this request may access the Django admin login form."""
 
-    local_override = getattr(settings, "ADMIN_LOGIN_LOCAL_OVERRIDE", None)
-    if local_override is not None:
-        return _is_enabled_value(local_override)
+    enabled_override = getattr(settings, "ADMIN_LOGIN_ENABLED_OVERRIDE", None)
+    if enabled_override is not None:
+        return _is_enabled_value(enabled_override)
 
     manual_enabled, cypress_token = _get_cached_access_configuration()
     return manual_enabled or _has_cypress_session_grant(request) or _has_valid_cypress_token(request, cypress_token)

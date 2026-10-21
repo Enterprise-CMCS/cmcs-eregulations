@@ -47,8 +47,7 @@ def expand_target_parts(
     if not isinstance(raw_parts, list):
         raise EregsConfigError("parser_config must include a parts array")
 
-    targets: list[TargetPartConfig] = []
-    seen: set[tuple[int, int, bool, bool]] = set()
+    targets: dict[tuple[int, int], TargetPartConfig] = {}
 
     for item in raw_parts:
         if not isinstance(item, dict):
@@ -78,20 +77,25 @@ def expand_target_parts(
             raise EregsConfigError(f"unsupported part type '{item_type}'")
 
         for part_number in part_numbers:
-            key = (title_number, part_number, upload_reg_text, upload_locations)
-            if key in seen:
-                continue
-            seen.add(key)
-            targets.append(
-                TargetPartConfig(
+            key = (title_number, part_number)
+            existing = targets.get(key)
+            if existing is None:
+                targets[key] = TargetPartConfig(
                     title_number=title_number,
                     part_number=part_number,
                     upload_reg_text=upload_reg_text,
                     upload_locations=upload_locations,
                 )
+                continue
+
+            targets[key] = TargetPartConfig(
+                title_number=title_number,
+                part_number=part_number,
+                upload_reg_text=existing.upload_reg_text or upload_reg_text,
+                upload_locations=existing.upload_locations or upload_locations,
             )
 
-    return targets
+    return list(targets.values())
 
 
 def fetch_existing_part_dates_by_title(
