@@ -291,6 +291,7 @@ export class BackendStack extends cdk.Stack {
             READER_SECRET: SECRET_NAMES.READER_CREDENTIALS,
             ADMIN_LOGIN_ENABLED_PARAMETER: PARAMETER_NAMES.ADMIN_LOGIN_ENABLED,
             ADMIN_LOGIN_CYPRESS_TOKEN_SECRET: SECRET_NAMES.ADMIN_LOGIN_CYPRESS_TOKEN,
+            ...(stageConfig.isEphemeral() ? { ADMIN_LOGIN_ENABLED_OVERRIDE: 'true' } : {}),
         };
 
         // ================================

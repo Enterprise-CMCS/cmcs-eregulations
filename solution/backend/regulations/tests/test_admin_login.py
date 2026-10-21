@@ -12,7 +12,7 @@ from regulations.admin_login import clear_admin_login_cache
 
 @mock_aws
 @override_settings(
-    ADMIN_LOGIN_LOCAL_OVERRIDE=None,
+    ADMIN_LOGIN_ENABLED_OVERRIDE=None,
     ADMIN_LOGIN_ENABLED_PARAMETER="/eregulations/admin-login-enabled",
     ADMIN_LOGIN_CYPRESS_TOKEN_SECRET="/eregulations/admin-login-cypress-token",  # noqa: S106
 )
@@ -67,6 +67,32 @@ class AdminLoginViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'id="id_username"')
+
+    @override_settings(ADMIN_LOGIN_ENABLED_OVERRIDE="true")
+    def test_admin_login_enabled_override_bypasses_aws_configuration(self):
+        self.ssm.delete_parameter(Name="/eregulations/admin-login-enabled")
+        self.secrets_manager.delete_secret(
+            SecretId="/eregulations/admin-login-cypress-token",
+            ForceDeleteWithoutRecovery=True,
+        )
+
+        response = self.client.get("/admin/login/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="id_username"')
+
+    @override_settings(ADMIN_LOGIN_ENABLED_OVERRIDE="false")
+    def test_admin_login_disabled_override_takes_precedence_over_aws_configuration(self):
+        self.ssm.put_parameter(
+            Name="/eregulations/admin-login-enabled",
+            Value="true",
+            Type="String",
+            Overwrite=True,
+        )
+
+        response = self.client.get("/admin/login/")
+
+        self.assertEqual(response.status_code, 404)
 
     def test_admin_login_allows_valid_cypress_token(self):
         response = self.client.get(
