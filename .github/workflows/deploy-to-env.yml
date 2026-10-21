@@ -529,6 +529,7 @@ jobs:
           config: baseUrl=${{ needs.deploy-site.outputs.api_url }}
         env:
           CYPRESS_DEPLOYING: true
+          CYPRESS_ADMIN_LOGIN_TOKEN_REQUIRED: ${{ inputs.pr_number == '' }}
 
       - name: Notify Slack if failure occurs cypress tests
         if: ${{ inputs.pr_number == '' && failure() }}
