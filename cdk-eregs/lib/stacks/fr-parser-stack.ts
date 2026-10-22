@@ -4,8 +4,7 @@ import {
     aws_logs as logs,
     aws_iam as iam,
     aws_sqs as sqs,
-    aws_events as events,
-    aws_events_targets as targets,
+    aws_scheduler as scheduler,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -106,11 +105,28 @@ export class FrParserStack extends cdk.Stack {
             enabled: true,
         });
 
-        const rule = new events.Rule(this, 'FrParserLauncherSchedule', {
-            schedule: events.Schedule.expression('cron(5 0 * * ? *)'),
-            enabled: true,
+        const schedulerRole = new iam.Role(this, 'FrParserSchedulerRole', {
+            assumedBy: new iam.ServicePrincipal('scheduler.amazonaws.com'),
         });
-        rule.addTarget(new targets.LambdaFunction(launcher));
+        schedulerRole.addToPolicy(new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: ['lambda:InvokeFunction'],
+            resources: [launcher.functionArn],
+        }));
+
+        new scheduler.CfnSchedule(this, 'FrParserLauncherSchedule', {
+            name: stageConfig.getResourceName('fr-parser-schedule'),
+            scheduleExpression: 'cron(5 1 * * ? *)',
+            scheduleExpressionTimezone: 'America/New_York',
+            state: 'ENABLED',
+            flexibleTimeWindow: {
+                mode: 'OFF',
+            },
+            target: {
+                arn: launcher.functionArn,
+                roleArn: schedulerRole.roleArn,
+            },
+        });
 
         const outputs: Record<string, cdk.CfnOutputProps> = {
             FrParserQueueArn: {

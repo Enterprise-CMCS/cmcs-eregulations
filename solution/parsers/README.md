@@ -21,6 +21,8 @@ Pipelines:
 
 In local mode (`PARSER_LOCAL_MODE=true`), launchers call workers over HTTP through lambda-proxy. In deployed mode, launchers send to SQS.
 
+Deployed launchers run daily through EventBridge Scheduler in the `America/New_York` timezone: eCFR at 1:00 AM and Federal Register at 1:05 AM. The schedules use exact timing with no flexible delivery window.
+
 ## Parser flowcharts
 
 The diagrams below show the deployed flow. In local mode, the launcher-to-SQS edge is replaced by a POST through lambda-proxy to the worker; the worker pipeline is otherwise the same.
@@ -31,7 +33,7 @@ The diagrams below show the deployed flow. In local mode, the launcher-to-SQS ed
 
 ```mermaid
 flowchart TD
-    ecfrSchedule["EventBridge daily schedule<br/>or manual invoke"] --> ecfrLauncher["eCFR launcher"]
+    ecfrSchedule["EventBridge Scheduler daily schedule<br/>or manual invoke"] --> ecfrLauncher["eCFR launcher"]
     ecfrLauncher --> ecfrCredentials["Resolve eRegs credentials<br/>from runtime configuration"]
     ecfrCredentials --> ecfrConfig["GET /v3/parsers/config"]
     ecfrConfig --> ecfrRun["POST /v3/parsers/ecfr/launcher-results<br/>create launcher-run record"]
@@ -100,7 +102,7 @@ The eCFR upload endpoint is also the integration point for saving current regula
 
 ```mermaid
 flowchart TD
-    frSchedule["EventBridge daily schedule<br/>or manual invoke"] --> frLauncher["FR launcher"]
+    frSchedule["EventBridge Scheduler daily schedule<br/>or manual invoke"] --> frLauncher["FR launcher"]
     frLauncher --> frCredentials["Resolve eRegs credentials<br/>from runtime configuration"]
     frCredentials --> frConfig["GET /v3/parsers/config"]
     frConfig --> frTargets["Expand upload_fr_docs part<br/>and subchapter targets"]
