@@ -39,11 +39,17 @@ ENV LAMBDA_TASK_ROOT=/var/task
 ENV DJANGO_CONFIGURATION=Production
 ENV PYTHONUNBUFFERED=1
 ARG BUILD_ID=env
+ARG AL2023_RELEASE=2023.12.20261026
 RUN dnf clean all && \
-    dnf update -y pcre2 && \
+    dnf --releasever="${AL2023_RELEASE}" update -y pcre2 && \
     dnf clean all && \
-    echo "BUILD_ID is: ${BUILD_ID}" && \
-    rpm -q pcre2
+    PCRE2_RELEASE="$(rpm -q --qf '%{RELEASE}' pcre2)" && \
+    echo "PCRE2 release: ${PCRE2_RELEASE}" && \
+    case "${PCRE2_RELEASE}" in \
+        1.amzn2023.0.[5-9]|1.amzn2023.0.[1-9][0-9]*) ;; \
+        *) echo "PCRE2 release ${PCRE2_RELEASE} is older than fixed 1.amzn2023.0.5" >&2; exit 1 ;; \
+    esac && \
+    echo "BUILD_ID is: ${BUILD_ID}"
 
 # Copy function code
 COPY . ${LAMBDA_TASK_ROOT}/
