@@ -39,7 +39,11 @@ ENV LAMBDA_TASK_ROOT=/var/task
 ENV DJANGO_CONFIGURATION=Production
 ENV PYTHONUNBUFFERED=1
 ARG BUILD_ID=env
-RUN echo "BUILD_ID is: ${BUILD_ID}"
+RUN dnf clean all && \
+    dnf update -y pcre2 && \
+    dnf clean all && \
+    echo "BUILD_ID is: ${BUILD_ID}" && \
+    rpm -q pcre2
 
 # Copy function code
 COPY . ${LAMBDA_TASK_ROOT}/

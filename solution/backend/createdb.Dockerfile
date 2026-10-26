@@ -33,7 +33,11 @@ FROM public.ecr.aws/lambda/python:3.12
 COPY --from=builder ${LAMBDA_TASK_ROOT} ${LAMBDA_TASK_ROOT}
 
 ARG BUILD_ID=env
-RUN echo "BUILD_ID is: ${BUILD_ID}"
+RUN dnf clean all && \
+    dnf update -y pcre2 && \
+    dnf clean all && \
+    echo "BUILD_ID is: ${BUILD_ID}" && \
+    rpm -q pcre2
 
 # Copy function code
 COPY . ${LAMBDA_TASK_ROOT}/
