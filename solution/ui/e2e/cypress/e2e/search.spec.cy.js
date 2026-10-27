@@ -6,7 +6,7 @@ const SEARCH_TERM_2 = "almond";
 const NO_RESULTS_SEARCH_TERM = "no results";
 const SPACED_SEARCH_TERM = "test query";
 
-describe("Search flow", () => {
+describe("Search flow", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
             cy.intercept("/**", (req) => {
@@ -19,7 +19,7 @@ describe("Search flow", () => {
                 fixture: "policy-docs-search.json",
             }).as("subjectFiles");
 
-            cy.intercept("**/v3/title/${TITLE_42}/parts", {
+            cy.intercept(`**/v3/title/${TITLE_42}/parts`, {
                 fixture: "parts-42.json",
             }).as("parts42");
 

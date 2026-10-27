@@ -25,7 +25,12 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         force: true,
     });
 
-    cy.wait(["@queriedFiles", "@publicCategories", "@internalCategories"]);
+    cy.wait([
+        "@partsLastUpdated",
+        "@queriedFiles",
+        "@publicCategories",
+        "@internalCategories",
+    ]);
 
     //----- Internal doc
     cy.get('[data-testid="results-item-categories"] .doc-type__label')
