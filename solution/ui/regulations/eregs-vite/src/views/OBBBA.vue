@@ -10,6 +10,7 @@ import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 
+import { houseGovUrl } from "eregsComponentLib/src/components/shared-components/Statutes/utils/urlMethods.js";
 import LeftNavCollapse from "eregsComponentLib/src/components/shared-components/LeftNavCollapse.vue";
 
 const adminUrl = inject("adminUrl");
@@ -693,7 +694,7 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Medicaid</span>.—
                     <a id="H4FE266775AFB4A558143D02CDF85AD60" />
                     <span class="lbexIndentParagraph">(1) IN GENERAL.—Section 1902 of the Social Security Act (<a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        :href="houseGovUrl({ title: 42, usc: '1396a' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -784,7 +785,7 @@ onMounted(() => {
                 <span class="lbexIndentParagraph">(2) CONFORMING AMENDMENTS.—
                     <a id="HB74BBF87B95342CD9D5397956A44F7A8" />
                     <span class="lbexIndentSubpar">(A) PARIS.—Section 1903(r)(3) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_r_3"
+                        :href="houseGovUrl({ title: 42, usc: '1396b' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -813,7 +814,7 @@ onMounted(() => {
 
                     <a id="H29669828A6FE4AA8807F272ECC1881B0" />
                     <span class="lbexIndentSubpar">(B) MANAGED CARE.—Section 1932 of the Social Security Act (<a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396u-2"
+                        :href="houseGovUrl({ title: 42, usc: '1396u-2' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -833,7 +834,7 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">CHIP</span>.—
                     <a id="H5459CCDF4E1540A7A72D53384E8236A5" />
                     <span class="lbexIndentParagraph">(1) IN GENERAL.—Section 2107(e)(1) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1397gg&num=0&edition=prelim#substructure-location_e_1"
+                        :href="houseGovUrl({ title: 42, usc: '1397gg' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -851,7 +852,7 @@ onMounted(() => {
 
                     <a id="HC4AD55EEC3074DA5B1BFA04CB250B1DE" />
                     <span class="lbexIndentParagraph">(2) MANAGED CARE.—Section 2103(f)(3) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1397cc&num=0&edition=prelim#substructure-location_f_3"
+                        :href="houseGovUrl({ title: 42, usc: '1397cc' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -872,7 +873,7 @@ onMounted(() => {
 
                 <span class="lbexIndent">
                     <span class="lbexIndent">Section 1902 of the Social Security Act (<a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        :href="houseGovUrl({ title: 42, usc: '1396a' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -940,7 +941,7 @@ onMounted(() => {
 
                 <span class="lbexIndent">
                     <span class="lbexIndentSectionText">Section 1902(kk)(1) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_kk_1"
+                        :href="houseGovUrl({ title: 42, usc: '1396a' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -977,7 +978,7 @@ onMounted(() => {
                 <a id="HC670A843FC9F4238A6146494C352067E" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1903(u)(1) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_u_1"
+                        :href="houseGovUrl({ title: 42, usc: '1396b' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1041,7 +1042,7 @@ onMounted(() => {
                 <a id="H17BE0BEBA4774BD2AC044EDEDBDC0FDC" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1902(e)(14) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_e_14"
+                        :href="houseGovUrl({ title: 42, usc: '1396a' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1055,7 +1056,7 @@ onMounted(() => {
                                 <span class="lbexIndentSubclause">“(I) Individuals enrolled under subsection (a)(10)(A)(i)(VIII).</span>
                                 <a id="H44422F1978A4463FA00A5337D5FDFC64" />
                                 <span class="lbexIndentSubclause">“(II) Individuals described in such subsection who are otherwise enrolled under a waiver of such plan that provides coverage that is equivalent to minimum essential coverage (as described in <a
-                                    href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
+                                    :href="houseGovUrl({ title: 26, usc: '5000A' })"
                                     class="external"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -1092,7 +1093,7 @@ onMounted(() => {
                 <a id="HAFFB5AB97A84416A8CA2844C876D3889" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">Revising home equity limit</span>.—Section 1917(f)(1) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396p&num=0&edition=prelim#substructure-location_f_1"
+                        :href="houseGovUrl({ title: 42, usc: '1396p' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1127,7 +1128,7 @@ onMounted(() => {
                 <a id="HE9B43645948347829A70DCF2C7126573" />
                 <span class="lbexIndent">(b)
                     <span class="lbexSectionLevelOLCnuclear">Clarification</span>.—Section 1902 of the Social Security Act (<a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        :href="houseGovUrl({ title: 42, usc: '1396a' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1177,7 +1178,7 @@ onMounted(() => {
                 <a id="HCEC62AA2268345DEB0305C1D76EE56A5" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">Medicaid</span>.—Section 1903(v) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_v"
+                        :href="houseGovUrl({ title: 42, usc: '1396b' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1240,7 +1241,7 @@ onMounted(() => {
                 <a id="H050F12666B2B40318BF49AFC9987802E" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1905 of the Social Security Act (<a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396d"
+                        :href="houseGovUrl({ title: 42, usc: '1396d' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1315,7 +1316,7 @@ onMounted(() => {
                 <a id="HD7F49CCDD9744A4C9F10E968B0298EB9" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1902(a)(34) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_34"
+                        :href="houseGovUrl({ title: 42, usc: '1396a' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1334,7 +1335,7 @@ onMounted(() => {
                 <a id="HC7870E6A3EC949A3AB2EA6683E9D3219" />
                 <span class="lbexIndent">(b)
                     <span class="lbexSectionLevelOLCnuclear">Definition of medical assistance</span>.—Section 1905(a) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396d&num=0&edition=prelim#substructure-location_a"
+                        :href="houseGovUrl({ title: 42, usc: '1396d' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1342,7 +1343,7 @@ onMounted(() => {
                 <a id="H961706CDB4CE450EAD37A45CDA1206E3" />
                 <span class="lbexIndent">(c)
                     <span class="lbexSectionLevelOLCnuclear">CHIP</span>.—Section 2102(b)(1)(B) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1397bb&num=0&edition=prelim#substructure-location_b_1_B"
+                        :href="houseGovUrl({ title: 42, usc: '1397bb' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1392,7 +1393,7 @@ onMounted(() => {
                         <span class="lbexIndentSubpar">(A) that, as of the first day of the first quarter beginning after the date of enactment of this Act—
                             <a id="H608232A6175D4CD4BC1E3FB45CABE32C" />
                             <span class="lbexIndentClause">(i) is an organization described in <a
-                                href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=501"
+                                :href="houseGovUrl({ title: 26, usc: '501' })"
                                 class="external"
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -1418,7 +1419,7 @@ onMounted(() => {
 
                 <a id="HD88761F8ED344F4983817A5D46050378" />
                 <span class="lbexIndentParagraph">(2) DIRECT SPENDING.—The term “direct spending” has the meaning given that term under section 250(c) of the Balanced Budget and Emergency Deficit Control Act of 1985 (<a
-                    href="https://uscode.house.gov/quicksearch/get.plx?title=2&amp;section=900"
+                    :href="houseGovUrl({ title: 2, usc: '900' })"
                     class="external"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -1426,12 +1427,12 @@ onMounted(() => {
 
                 <a id="HD46C0855B83542C4B5E1F07AC65444C4" />
                 <span class="lbexIndentParagraph">(3) COVERED ORGANIZATION.—The term “covered organization” means a managed care entity (as defined in section 1932(a)(1)(B) of the Social Security Act (<a
-                    href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396u-2&num=0&edition=prelim#substructure-location_a_1_B"
+                    :href="houseGovUrl({ title: 42, usc: '1396u-2' })"
                     class="external"
                     target="_blank"
                     rel="noopener noreferrer"
                 >42 U.S.C. 1396u–2(a)(1)(B)</a>)) or a prepaid inpatient health plan or prepaid ambulatory health plan (as such terms are defined in section 1903(m)(9)(D) of such Act (<a
-                    href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_m_9_D"
+                    :href="houseGovUrl({ title: 42, usc: '1396b' })"
                     class="external"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -1439,7 +1440,7 @@ onMounted(() => {
 
                 <a id="HB3D54CA27A1A43199BB46535DA7D0DD6" />
                 <span class="lbexIndentParagraph">(4) STATE.—The term “State” has the meaning given such term in section 1101 of the Social Security Act (<a
-                    href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1301"
+                    :href="houseGovUrl({ title: 42, usc: '1301' })"
                     class="external"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -1471,7 +1472,7 @@ onMounted(() => {
 
                 <span class="lbexIndent">
                     <span class="lbexIndentSectionText">Section 1905(ii)(3) of the Social Security Act (<a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396d"
+                        :href="houseGovUrl({ title: 42, usc: '1396d' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1509,7 +1510,7 @@ onMounted(() => {
                 <a id="HD1668A87651A42AEBD33453570189B7A" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">Change in threshold for hold harmless provision of broad-based health care related taxes</span>.—Section 1903(w)(4) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_w_4"
+                        :href="houseGovUrl({ title: 42, usc: '1396b' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1612,12 +1613,12 @@ onMounted(() => {
                     >438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) such that, with respect to a payment described in such section made for a service furnished during a rating period beginning on or after the date of the enactment of this Act, the total payment rate for such service is limited to—
                     <a id="HC7FA119FA48845338BE885CBFF7EB408" />
                     <span class="lbexIndentParagraph">(1) in the case of a State that provides coverage to all individuals described in section 1902(a)(10)(A)(i)(VIII) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_10_A_i_VIII"
+                        :href="houseGovUrl({ title: 42, usc: '1396a' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
                     >42 U.S.C. 1396a(a)(10)(A)(i)(VIII)</a>) that is equivalent to minimum essential coverage (as described in <a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
+                        :href="houseGovUrl({ title: 26, usc: '5000A' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1653,7 +1654,7 @@ onMounted(() => {
                 <span class="lbexIndentParagraph">(2) RURAL HOSPITAL.—The term “rural hospital” means the following:
                     <a id="HB4B48C2C98234AA180146381EB0C9DE7" />
                     <span class="lbexIndentSubpar">(A) A subsection (d) hospital (as defined in paragraph (1)(B) of section 1886(d) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d"
+                        :href="houseGovUrl({ title: 42, usc: '1395ww' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1673,7 +1674,7 @@ onMounted(() => {
 
                     <a id="HCE59402B78ED4216834F2661B7AE124E" />
                     <span class="lbexIndentSubpar">(B) A critical access hospital (as defined in section 1861(mm)(1) of such Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395x&num=0&edition=prelim#substructure-location_mm_1"
+                        :href="houseGovUrl({ title: 42, usc: '1395x' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1681,7 +1682,7 @@ onMounted(() => {
 
                     <a id="H469A0CCA86A648A08AC5D213366E217D" />
                     <span class="lbexIndentSubpar">(C) A sole community hospital (as defined in section 1886(d)(5)(D)(iii) of such Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d_5_D_iii"
+                        :href="houseGovUrl({ title: 42, usc: '1395ww' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1689,7 +1690,7 @@ onMounted(() => {
 
                     <a id="HCB61C01C4F9041ED89418D3EB562E5C3" />
                     <span class="lbexIndentSubpar">(D) A Medicare-dependent, small rural hospital (as defined in section 1886(d)(5)(G)(iv) of such Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d_5_G_iv"
+                        :href="houseGovUrl({ title: 42, usc: '1395ww' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1697,7 +1698,7 @@ onMounted(() => {
 
                     <a id="H141EDCA002E14CDE8BFBC3738961EB39" />
                     <span class="lbexIndentSubpar">(E) A low-volume hospital (as defined in section 1886(d)(12)(C) of such Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d_12_C"
+                        :href="houseGovUrl({ title: 42, usc: '1395ww' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1705,7 +1706,7 @@ onMounted(() => {
 
                     <a id="H99E320165DC64DC7B4E8DAEBFC4F42F1" />
                     <span class="lbexIndentSubpar">(F) A rural emergency hospital (as defined in section 1861(kkk)(2) of such Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395x&num=0&edition=prelim#substructure-location_kkk_2"
+                        :href="houseGovUrl({ title: 42, usc: '1395x' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1744,7 +1745,7 @@ onMounted(() => {
                 <a id="H946D195148204135A731BDE8117729B1" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1903(w) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_w"
+                        :href="houseGovUrl({ title: 42, usc: '1396b' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1826,7 +1827,7 @@ onMounted(() => {
                 <a id="H05A306D8A48742AE85C93943E85D9BFD" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1115 of the Social Security Act (<a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
+                        :href="houseGovUrl({ title: 42, usc: '1315' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1872,7 +1873,7 @@ onMounted(() => {
                 <a id="H2B46E3225A4B47F5815B7CBC456D620D" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1902 of the Social Security Act (<a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        :href="houseGovUrl({ title: 42, usc: '1396a' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -1921,7 +1922,7 @@ onMounted(() => {
 
                                 <a id="H0DF1E2271CF94FE786EF1A1CEF2901C8" />
                                 <span class="lbexIndentSubpar">“(G) The individual had an average monthly income over the preceding 6 months that is not less than the applicable minimum wage requirement under section 6 of the Fair Labor Standards Act of 1938 multiplied by 80 hours, and is a seasonal worker, as described in <a
-                                    href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=45R"
+                                    :href="houseGovUrl({ title: 26, usc: '45R' })"
                                     class="external"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -2029,7 +2030,7 @@ onMounted(() => {
                                 <span class="lbexIndentSubpar">“(A) CERTAIN FMAP INCREASES.—A State shall not be treated as not providing medical assistance to all individuals described in section 1902(a)(10)(A)(i)(VIII), or as not expending amounts for all such individuals under the State plan (or waiver of such plan), solely because such an individual is determined ineligible for medical assistance under the State plan (or waiver) on the basis of a failure to meet the requirement to demonstrate community engagement under <a href="#HEE8799D1FF664550B27FE20B048550DA">paragraph (1)</a>.</span>
                                 <a id="H75313C7D56A34AA6B2E121F20CE90BC0" />
                                 <span class="lbexIndentSubpar">“(B) OTHER PROVISIONS.—For purposes of <a
-                                    href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=36B"
+                                    :href="houseGovUrl({ title: 26, usc: '36B' })"
                                     class="external"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -2078,7 +2079,7 @@ onMounted(() => {
                                         <span class="lbexIndentSubclause">“(II) who—
                                             <a id="H6DA32B725062462FB83E1B64F8AA3B6A" />
                                             <span class="lbexIndentItem">“(aa) is otherwise eligible to enroll (or is enrolled) under a waiver of such plan that provides coverage that is equivalent to minimum essential coverage (as described in <a
-                                                href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
+                                                :href="houseGovUrl({ title: 26, usc: '5000A' })"
                                                 class="external"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
@@ -2219,7 +2220,7 @@ onMounted(() => {
                 <a id="HD73A0A07C3EF48EE94CB56DC583A01D2" />
                 <span class="lbexIndent">(b)
                     <span class="lbexSectionLevelOLCnuclear">Conforming amendment</span>.—Section 1902(a)(10)(A)(i)(VIII) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_10_A_i_VIII"
+                        :href="houseGovUrl({ title: 42, usc: '1396a' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -2275,7 +2276,7 @@ onMounted(() => {
                 <a id="HD8C2EFE59E624828BEE359C477862C45" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1916 of the Social Security Act (<a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396o"
+                        :href="houseGovUrl({ title: 42, usc: '1396o' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -2322,7 +2323,7 @@ onMounted(() => {
                                 <span class="lbexIndentSubpar">“(A) is enrolled under section 1902(a)(10)(A)(i)(VIII); or</span>
                                 <a id="HB5FBE619E4DD42D7B7EE7E5F949F42EF" />
                                 <span class="lbexIndentSubpar">“(B) is described in such subsection and otherwise enrolled under a waiver of the State plan that provides coverage that is equivalent to minimum essential coverage (as described in <a
-                                    href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
+                                    :href="houseGovUrl({ title: 26, usc: '5000A' })"
                                     class="external"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -2339,7 +2340,7 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Conforming amendments</span>.—
                     <a id="H09151CE0186646DC87BE91BBFE5EE99F" />
                     <span class="lbexIndentParagraph">(1) REQUIRED APPLICATION.—Section 1902(a)(14) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_14"
+                        :href="houseGovUrl({ title: 42, usc: '1396a' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -2347,7 +2348,7 @@ onMounted(() => {
                 </span>
                 <a id="H13A29E0011FC45E9819A7CF3D0D061EF" />
                 <span class="lbexIndentParagraph">(2) NONAPPLICABILITY OF ALTERNATIVE COST SHARING.—Section 1916A(a)(1) of the Social Security Act (<a
-                    href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396o-1&num=0&edition=prelim#substructure-location_a_1"
+                    :href="houseGovUrl({ title: 42, usc: '1396o-1' })"
                     class="external"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -2380,7 +2381,7 @@ onMounted(() => {
                 <a id="H8F4E00E92C574C8D98E1F0E93E875667" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">Expanding HCBS coverage under section 1915(c) waivers</span>.—Section 1915(c) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim#substructure-location_c"
+                        :href="houseGovUrl({ title: 42, usc: '1396n' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -2445,12 +2446,12 @@ onMounted(() => {
 
                         <a id="H00AE6B0E31E3445183E405CA6E007DB5" />
                         <span class="lbexIndentSubpar">(B) for fiscal year 2027, $100,000,000 for purposes of making payments to States, subject to paragraph (2), to support State systems to deliver home or community-based services under section 1915(c) of the Social Security Act (<a
-                            href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim#substructure-location_c"
+                            :href="houseGovUrl({ title: 42, usc: '1396n' })"
                             class="external"
                             target="_blank"
                             rel="noopener noreferrer"
                         >42 U.S.C. 1396n(c)</a>) (as amended by this section) or under section 1115 of such Act (<a
-                            href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
+                            :href="houseGovUrl({ title: 42, usc: '1315' })"
                             class="external"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -2459,12 +2460,12 @@ onMounted(() => {
 
                     <a id="H049F6580A824403F9ACCBED4B8F41ED5" />
                     <span class="lbexIndentParagraph">(2) PAYMENTS BASED ON STATE HCBS ELIGIBLE POPULATION.—Payments to States from amounts made available by paragraph (1)(B) shall be made, with respect to a State, on the basis of the proportion of the population of the State that is receiving home or community-based services under section1915(c) of the Social Security Act (<a
-                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim#substructure-location_c"
+                        :href="houseGovUrl({ title: 42, usc: '1396n' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
                     >42 U.S.C. 1396n(c)</a>) (as amended by this section) or under section 1115 of such Act (<a
-                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
+                        :href="houseGovUrl({ title: 42, usc: '1315' })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
