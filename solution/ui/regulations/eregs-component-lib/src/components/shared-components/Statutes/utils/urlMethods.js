@@ -11,7 +11,7 @@ const houseGovUrl = ({ title, usc } = {}) => {
 
     if (!title && !usc) return prefix;
 
-    return `${prefix}view.xhtml?hl=false&edition=prelim&req=granuleid%3AUSC-prelim-title${title}-section${usc}`;
+    return `${prefix}us/usc/t${title}/s${usc}`;
 }
 
 /**
