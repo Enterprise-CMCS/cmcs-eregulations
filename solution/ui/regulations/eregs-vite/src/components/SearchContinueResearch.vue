@@ -22,29 +22,12 @@ const makeFederalRegisterLink = (query) =>
 const makeMedicaidGovLink = (query) =>
     `https://www.medicaid.gov/search/content?keys=${encodeURIComponent(query)}`;
 
-const makeUsCodeLink = (query) => {
-    const urlEncodedQuery = encodeURIComponent(query);
-
-    let base64Query;
-    try {
-        base64Query = btoa(query);
-    } catch (_error) {
-        console.error("Failed to encode US Code query to base64");
-        return false;
-    }
-
-    const urlEncodedBase64Query = encodeURIComponent(base64Query);
-
-    return `https://uscode.house.gov/search.xhtml?edition=prelim&searchString=%28${urlEncodedQuery}%29+AND+%28%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2819%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2821%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2818%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2816%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2811%29%29%29&pageNumber=1&itemsPerPage=100&sortField=RELEVANCE&displayType=CONTEXT&action=search&q=${urlEncodedBase64Query}%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7Ctrue%7C%5B42%3A%3A%3A%3A7%3A19%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A21%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A18%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A16%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A11%3A%3A%3Atrue%3A%5D%7C%5BQWxsIEZpZWxkcw%3D%3D%3A%5D`;
-};
-
 export default {
     hasQuotes,
     hasSpaces,
     makeEcfrLink,
     makeFederalRegisterLink,
     makeMedicaidGovLink,
-    makeUsCodeLink,
 };
 </script>
 
@@ -173,14 +156,6 @@ const truncatedQuery = computed(() => truncateQueryForDisplay({ query: props.que
                         target="_blank"
                         rel="noopener noreferrer"
                     >Federal Register</a>
-                </li>
-                <li v-if="makeUsCodeLink(query)">
-                    <a
-                        :href="makeUsCodeLink(query)"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >United States Code</a>
                 </li>
             </ul>
         </div>
