@@ -98,11 +98,11 @@ describe("Statute Table", () => {
             cy.get(".more-info__row .row__content")
                 .eq(0)
                 .find("a")
-                .should("have.attr", "href", "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim")
+                .should("have.attr", "href", "https://uscode.house.gov/us/usc/t42/s1396b")
                 .and("have.attr", "target", "_blank")
                 .and("have.attr", "rel", "noopener noreferrer")
                 .and("have.attr", "class", "external")
-                .and("contain", "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim")
+                .and("contain", "https://uscode.house.gov/us/usc/t42/s1396b")
         });
 
         cy.injectAxe();
