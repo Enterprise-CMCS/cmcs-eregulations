@@ -3,16 +3,20 @@
 /**
  * @param {number} title - CFR title (ex: 42)
  * @param {string} usc - USC section
+ * @param {string} [hash] - Optional substructure hash (ex: "a-84")
  *
  * @returns {string} url - url to the House.gov page for the USC section
  */
-const houseGovUrl = ({ title, usc } = {}) => {
+const houseGovUrl = ({ title, usc, hash } = {}) => {
     const prefix = "https://uscode.house.gov/";
 
     if (!title && !usc) return prefix;
 
-    return `${prefix}us/usc/t${title}/s${usc}`;
-}
+    const cleanHash = hash ? hash.replace(/^#/, "") : "";
+    const fragment = cleanHash ? `#${cleanHash}` : "";
+
+    return `${prefix}us/usc/t${title}/s${usc}/${fragment}`;
+};
 
 /**
  * @param {string} souce_url - URL containing COMPS number

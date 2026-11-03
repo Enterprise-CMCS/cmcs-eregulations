@@ -12,7 +12,8 @@ class ReplaceCitationTests(TestCase):
         self.maxDiff = None  # To see full diff in case of failure
         self.link_conversions = {
             "Social Security Act": {
-                "1102": {"title": "42", "usc": "1302"}
+                "1102": {"title": "42", "usc": "1302"},
+                "1902": {"title": "42", "usc": "1396a"},
             }
         }
 
@@ -44,7 +45,7 @@ class ReplaceCitationTests(TestCase):
         result = replace_usc_citation(match, title="42", exceptions={}, generate_url_only=False)
         expected_link = (
             '<a target="_blank" rel="noopener noreferrer" class="external" '
-            'href="https://uscode.house.gov/us/usc/t42/s6409">6409</a>'
+            'href="https://uscode.house.gov/us/usc/t42/s6409/">6409</a>'
         )
         self.assertEqual(result, expected_link)
 
@@ -52,14 +53,14 @@ class ReplaceCitationTests(TestCase):
         match = MagicMock()
         match.group.side_effect = ["6409"]
         result = replace_usc_citation(match, title="42", exceptions={}, generate_url_only=True)
-        expected_link = "https://uscode.house.gov/us/usc/t42/s6409"
+        expected_link = "https://uscode.house.gov/us/usc/t42/s6409/"
         self.assertEqual(result, expected_link)
 
-    def test_replace_usc_citation_with_paragraphs_omits_fragment(self):
+    def test_replace_usc_citation_with_paragraphs_includes_fragment(self):
         match = MagicMock()
-        match.group.side_effect = ["6409(a)(1)"]
+        match.group.side_effect = ["6409(a)(1)(C)"]
         result = replace_usc_citation(match, title="42", exceptions={}, generate_url_only=True)
-        self.assertEqual(result, "https://uscode.house.gov/us/usc/t42/s6409")
+        self.assertEqual(result, "https://uscode.house.gov/us/usc/t42/s6409/#a-1-C")
 
     def test_replace_section_exception_url_only_false(self):
         match = MagicMock()
@@ -91,7 +92,7 @@ class ReplaceCitationTests(TestCase):
         )
         expected_link = (
             '<a target="_blank" rel="noopener noreferrer" class="external" '
-            'href="https://uscode.house.gov/us/usc/t42/s1302">1102</a>'
+            'href="https://uscode.house.gov/us/usc/t42/s1302/">1102</a>'
         )
         self.assertEqual(result, expected_link)
 
@@ -102,14 +103,14 @@ class ReplaceCitationTests(TestCase):
             match,
             act="Social Security Act", link_conversions=self.link_conversions, exceptions={}, generate_url_only=True
         )
-        expected_link = "https://uscode.house.gov/us/usc/t42/s1302"
+        expected_link = "https://uscode.house.gov/us/usc/t42/s1302/"
         self.assertEqual(result, expected_link)
 
-    def test_replace_section_with_paragraphs_omits_fragment(self):
+    def test_replace_section_with_paragraphs_includes_fragment(self):
         match = MagicMock()
-        match.group.side_effect = ["1102(a)(1)"]
+        match.group.side_effect = ["1902(a)(84)"]
         result = replace_section(
             match,
             act="Social Security Act", link_conversions=self.link_conversions, exceptions={}, generate_url_only=True
         )
-        self.assertEqual(result, "https://uscode.house.gov/us/usc/t42/s1302")
+        self.assertEqual(result, "https://uscode.house.gov/us/usc/t42/s1396a/#a-84")
