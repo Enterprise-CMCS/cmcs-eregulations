@@ -55,6 +55,8 @@ jobs:
           ENVIRONMENT_NAME: dev
         run: |
           set -uo pipefail
+          # GitHub Actions invokes run steps with errexit; cleanup must attempt every phase.
+          set +e
 
           if [[ -z "${PR_NUMBER}" || ! "${PR_NUMBER}" =~ ^[0-9]+$ ]]; then
             echo "A numeric PR number is required for ephemeral cleanup." >&2
@@ -111,11 +113,15 @@ jobs:
           stack_state() {
             local stack_name="$1"
             local error_file
+            local state
             error_file=$(mktemp)
 
-            retry_aws "${error_file}" 'does not exist|not exist' \
-              aws cloudformation describe-stacks --stack-name "${stack_name}" >/dev/null
-            local state=$?
+            if retry_aws "${error_file}" 'does not exist|not exist' \
+              aws cloudformation describe-stacks --stack-name "${stack_name}" >/dev/null; then
+              state=0
+            else
+              state=$?
+            fi
             if [ "${state}" -eq 0 ]; then
               rm -f "${error_file}"
               return 0
@@ -135,8 +141,11 @@ jobs:
             local stack_name="$1"
             local state
 
-            stack_state "${stack_name}"
-            state=$?
+            if stack_state "${stack_name}"; then
+              state=0
+            else
+              state=$?
+            fi
             case "${state}" in
               1)
                 echo "Stack already absent: ${stack_name}"
@@ -165,11 +174,15 @@ jobs:
             local invoke_status
             local error_file
             local database_status
+            local state
 
             error_file=$(mktemp)
-            retry_aws "${error_file}" 'ResourceNotFoundException|Function not found|does not exist' \
-              aws lambda get-function --function-name "${function_name}" >/dev/null
-            local state=$?
+            if retry_aws "${error_file}" 'ResourceNotFoundException|Function not found|does not exist' \
+              aws lambda get-function --function-name "${function_name}" >/dev/null; then
+              state=0
+            else
+              state=$?
+            fi
             if [ "${state}" -ne 0 ]; then
               if [ "${state}" -eq 2 ]; then
                 record_failure "Missing cleanup Lambda ${function_name}; database deletion cannot be verified"
@@ -184,10 +197,13 @@ jobs:
             metadata_file=$(mktemp)
             payload_file=$(mktemp)
             echo "Invoking Lambda: ${function_name}"
-            retry aws lambda invoke \
+            if retry aws lambda invoke \
               --function-name "${function_name}" \
-              "${payload_file}" >"${metadata_file}" 2>&1
-            invoke_status=$?
+              "${payload_file}" >"${metadata_file}" 2>&1; then
+              invoke_status=0
+            else
+              invoke_status=$?
+            fi
 
             tee -a aws.log <"${metadata_file}"
             if [ -s "${payload_file}" ]; then
@@ -216,8 +232,11 @@ jobs:
             local state
             local error_file
 
-            stack_state "${stack_name}"
-            state=$?
+            if stack_state "${stack_name}"; then
+              state=0
+            else
+              state=$?
+            fi
             case "${state}" in
               1)
                 echo "Static-assets stack already absent: ${stack_name}"
@@ -229,12 +248,15 @@ jobs:
             esac
 
             error_file=$(mktemp)
-            distribution_id=$(retry_aws "${error_file}" 'does not exist|not exist' \
+            if distribution_id=$(retry_aws "${error_file}" 'does not exist|not exist' \
               aws cloudformation describe-stacks \
               --stack-name "${stack_name}" \
               --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue | [0]" \
-              --output text)
-            local state=$?
+              --output text); then
+              state=0
+            else
+              state=$?
+            fi
             if [ "${state}" -ne 0 ]; then
               record_failure "Read CloudFormation outputs ${stack_name}: $(tr '\n' ' ' <"${error_file}")"
               rm -f "${error_file}"
@@ -272,11 +294,15 @@ jobs:
           cleanup_bucket() {
             local bucket_name="$1"
             local error_file
+            local state
 
             error_file=$(mktemp)
-            retry_aws "${error_file}" 'not found|no such bucket|404' \
-              aws s3api head-bucket --bucket "${bucket_name}" >/dev/null
-            local state=$?
+            if retry_aws "${error_file}" 'not found|no such bucket|404' \
+              aws s3api head-bucket --bucket "${bucket_name}" >/dev/null; then
+              state=0
+            else
+              state=$?
+            fi
             if [ "${state}" -ne 0 ]; then
               if [ "${state}" -eq 2 ]; then
                 echo "Bucket already absent: ${bucket_name}"
@@ -295,21 +321,21 @@ jobs:
             fi
           }
 
-          invoke_dropdb
+          invoke_dropdb || true
 
-          destroy_stack "cms-eregs-eph-${PR_NUMBER}-redirect-api"
-          destroy_stack "cms-eregs-eph-${PR_NUMBER}-maintenance-api"
-          destroy_stack "cms-eregs-eph-${PR_NUMBER}-ecfr-parser"
-          destroy_stack "cms-eregs-eph-${PR_NUMBER}-fr-parser"
-          destroy_stack "cms-eregs-eph-${PR_NUMBER}-api-mcp-server"
-          destroy_stack "cms-eregs-eph-${PR_NUMBER}-api"
-          destroy_stack "cms-eregs-eph-${PR_NUMBER}-text-extractor"
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-redirect-api" || true
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-maintenance-api" || true
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-ecfr-parser" || true
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-fr-parser" || true
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-api-mcp-server" || true
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-api" || true
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-text-extractor" || true
 
-          disable_cloudfront
-          destroy_stack "cms-eregs-eph-${PR_NUMBER}-static-assets"
+          disable_cloudfront || true
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-static-assets" || true
 
-          cleanup_bucket "cms-eregs-eph-${PR_NUMBER}-site-assets"
-          cleanup_bucket "cms-eregs-eph-${PR_NUMBER}-cloudfront-logs"
+          cleanup_bucket "cms-eregs-eph-${PR_NUMBER}-site-assets" || true
+          cleanup_bucket "cms-eregs-eph-${PR_NUMBER}-cloudfront-logs" || true
 
           if [ "${#failures[@]}" -gt 0 ]; then
             echo "Ephemeral cleanup completed with failures:"
