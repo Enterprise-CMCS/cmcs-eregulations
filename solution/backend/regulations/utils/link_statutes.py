@@ -18,8 +18,8 @@ from regulations.models import (
 )
 
 USCODE_ANCHOR_FORMAT = '<a target="_blank" rel="noopener noreferrer" class="external" href="{}">{}</a>'
-USCODE_LINK_FORMAT = 'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title{}-section{}&num=0&edition=prelim{}'
-USCODE_SUBSTRUCT_FORMAT = "#substructure-location_{}"
+USCODE_LINK_FORMAT = "https://uscode.house.gov/us/usc/t{}/s{}/{}"
+USCODE_SUBSTRUCT_FORMAT = "#{}"
 
 NUMBER_PATTERN = r"[0-9]+"
 
@@ -125,13 +125,12 @@ def replace_section(section, act, link_conversions, exceptions, generate_url_onl
     section = DASH_REGEX.sub("-", SECTION_ID_REGEX.match(citation).group())  # extract section
     # only link if section exists within the relevant act
     if act in link_conversions and section in link_conversions[act]:
-        paragraphs = extract_paragraphs(section_text)
+        paragraphs = extract_paragraphs(citation)
         conversion = link_conversions[act][section]
         link = USCODE_LINK_FORMAT.format(
             conversion["title"],
             DASH_REGEX.sub("-", conversion["usc"]),
-            USCODE_SUBSTRUCT_FORMAT.format("_".join(paragraphs)) if paragraphs else "",
-            citation,
+            USCODE_SUBSTRUCT_FORMAT.format("-".join(paragraphs)) if paragraphs else "",
         )
         if not generate_url_only:
             return USCODE_ANCHOR_FORMAT.format(link, citation) + remainder
@@ -173,8 +172,7 @@ def replace_usc_citation(match, title, exceptions, generate_url_only=False):
     link = USCODE_LINK_FORMAT.format(
         title,
         DASH_REGEX.sub("-", section),
-        USCODE_SUBSTRUCT_FORMAT.format("_".join(paragraphs)) if paragraphs else "",
-        citation,
+        USCODE_SUBSTRUCT_FORMAT.format("-".join(paragraphs)) if paragraphs else "",
     )
     if not generate_url_only:
         return USCODE_ANCHOR_FORMAT.format(link, citation) + remainder

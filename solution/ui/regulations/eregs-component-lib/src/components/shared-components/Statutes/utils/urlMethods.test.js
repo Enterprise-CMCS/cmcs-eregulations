@@ -15,8 +15,24 @@ describe("Statute Table URL methods", () => {
             const statuteItem = statutesFixture[0];
             const computedUrl = houseGovUrl(statuteItem);
             expect(computedUrl).toEqual(
-                "https://uscode.house.gov/view.xhtml?hl=false&edition=prelim&req=granuleid%3AUSC-prelim-title42-section1301"
+                "https://uscode.house.gov/us/usc/t42/s1301/"
             );
+        });
+
+        it("appends substructure hash fragment when provided", () => {
+            expect(
+                houseGovUrl({ title: 42, usc: "1396a", hash: "a-84" })
+            ).toEqual("https://uscode.house.gov/us/usc/t42/s1396a/#a-84");
+
+            expect(
+                houseGovUrl({ title: 42, usc: "1396a", hash: "#a-10-A-i-VIII" })
+            ).toEqual(
+                "https://uscode.house.gov/us/usc/t42/s1396a/#a-10-A-i-VIII"
+            );
+        });
+
+        it("returns base URL when title and usc are omitted", () => {
+            expect(houseGovUrl()).toEqual("https://uscode.house.gov/");
         });
     });
 
