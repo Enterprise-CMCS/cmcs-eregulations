@@ -2,6 +2,11 @@ name: Remove Experimental Deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Pull request number to clean up"
+        required: true
+        type: string
   pull_request:
     types: [ closed ]
 
@@ -16,10 +21,9 @@ jobs:
       name: "dev"
     runs-on: ubuntu-24.04
     steps:
-      # gettign PR is trivial here because the only tirgger is closing a PR
       - name: Echo PR#
         env:
-          PR: ${{ github.event.number }}
+          PR: ${{ inputs.pr_number || github.event.number }}
         run: echo "Your PR is ${PR}"
 
       # Checkout the code
@@ -44,77 +48,116 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-      - name: Destroy PR-Specific Redirect Stack
+      - name: Cleanup all ephemeral resources
         env:
-          PR_NUMBER: ${{ github.event.number }}
+          PR_NUMBER: ${{ inputs.pr_number || github.event.number }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
+          ENVIRONMENT_NAME: dev
         run: |
-          pushd cdk-eregs
-          npm install
+          set -uo pipefail
 
-          # Generate the exact stack name for this PR
-          STACK_NAME="cms-eregs-eph-${PR_NUMBER}-redirect-api"
+          if [[ -z "${PR_NUMBER}" || ! "${PR_NUMBER}" =~ ^[0-9]+$ ]]; then
+            echo "A numeric PR number is required for ephemeral cleanup." >&2
+            exit 1
+          fi
 
-          echo "Destroying PR-specific stack: ${STACK_NAME}"
-          npx cdk destroy "${STACK_NAME}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/zip-lambdas.ts"
+          failures=()
 
-          echo "Cleanup completed for stack: ${STACK_NAME}"
-          popd
+          record_failure() {
+            local label="$1"
+            failures+=("${label}")
+            echo "::error title=Ephemeral cleanup failed::${label}" >&2
+          }
 
-      - name: Destroy PR-Maintenance Stack
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
-        run: |
-          pushd cdk-eregs
-          npm install
+          retry() {
+            local attempts=1
+            local max_attempts=3
+            local delay=10
 
-          # Generate the exact stack name for this PR
-          STACK_NAME="cms-eregs-eph-${PR_NUMBER}-maintenance-api"
+            until "$@"; do
+              if [ "${attempts}" -ge "${max_attempts}" ]; then
+                return 1
+              fi
+              echo "Command failed; retrying in ${delay}s (${attempts}/${max_attempts}): $*" >&2
+              sleep "${delay}"
+              attempts=$((attempts + 1))
+              delay=$((delay * 2))
+            done
+          }
 
-          echo "Destroying PR-specific stack: ${STACK_NAME}"
-          npx cdk destroy "${STACK_NAME}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/zip-lambdas.ts"
+          stack_state() {
+            local stack_name="$1"
+            local error_file
+            error_file=$(mktemp)
 
-          echo "Cleanup completed for stack: ${STACK_NAME}"
-          popd
+            if retry aws cloudformation describe-stacks --stack-name "${stack_name}" >/dev/null 2>"${error_file}"; then
+              rm -f "${error_file}"
+              return 0
+            fi
 
-      - name: Cleanup Docker-based Lambda Stacks
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
-        run: |
-          pushd cdk-eregs
-          npm install
+            if grep -qi 'does not exist' "${error_file}"; then
+              rm -f "${error_file}"
+              return 1
+            fi
 
-          # Delete the database for this ephemeral environment
-          echo "Deleting database for PR: ${PR_NUMBER}"
-          set -euo pipefail
+            record_failure "Inspect CloudFormation stack ${stack_name}: $(tr '\n' ' ' <"${error_file}")"
+            rm -f "${error_file}"
+            return 2
+          }
 
-          invoke_setup_lambda() {
-            local function_name="$1"
+          destroy_stack() {
+            local stack_name="$1"
+            local state
+
+            stack_state "${stack_name}"
+            state=$?
+            case "${state}" in
+              1)
+                echo "Stack already absent: ${stack_name}"
+                return 0
+                ;;
+              2)
+                return 1
+                ;;
+            esac
+
+            echo "Destroying stack: ${stack_name}"
+            if ! retry aws cloudformation delete-stack --stack-name "${stack_name}"; then
+              record_failure "CloudFormation stack ${stack_name}"
+              return
+            fi
+
+            if ! retry aws cloudformation wait stack-delete-complete --stack-name "${stack_name}"; then
+              record_failure "CloudFormation stack deletion ${stack_name}"
+            fi
+          }
+
+          invoke_dropdb() {
+            local function_name="cms-eregs-eph-${PR_NUMBER}-dropdb"
             local metadata_file
             local payload_file
             local invoke_status
+            local error_file
+
+            error_file=$(mktemp)
+            if ! retry aws lambda get-function --function-name "${function_name}" >/dev/null 2>"${error_file}"; then
+              if grep -qi 'ResourceNotFoundException' "${error_file}"; then
+                record_failure "Missing cleanup Lambda ${function_name}; database deletion cannot be verified"
+              else
+                record_failure "Inspect cleanup Lambda ${function_name}: $(tr '\n' ' ' <"${error_file}")"
+              fi
+              rm -f "${error_file}"
+              return
+            fi
+            rm -f "${error_file}"
 
             metadata_file=$(mktemp)
             payload_file=$(mktemp)
-
             echo "Invoking Lambda: ${function_name}"
-            set +e
-            aws lambda invoke \
+            retry aws lambda invoke \
               --function-name "${function_name}" \
               "${payload_file}" >"${metadata_file}" 2>&1
             invoke_status=$?
-            set -e
 
             tee -a aws.log <"${metadata_file}"
             if [ -s "${payload_file}" ]; then
@@ -122,114 +165,116 @@ jobs:
             fi
 
             if [ "${invoke_status}" -ne 0 ]; then
-              echo "AWS Lambda invocation failed: ${function_name}" >&2
-              rm -f "${metadata_file}" "${payload_file}"
-              return "${invoke_status}"
-            fi
-
-            if grep -q "FunctionError" "${metadata_file}"; then
-              echo "Lambda function failed: ${function_name}" >&2
-              rm -f "${metadata_file}" "${payload_file}"
-              return 1
+              record_failure "AWS invocation ${function_name}"
+            elif grep -q '"FunctionError"' "${metadata_file}"; then
+              record_failure "Lambda execution ${function_name}"
             fi
 
             rm -f "${metadata_file}" "${payload_file}"
           }
 
-          invoke_setup_lambda "cms-eregs-eph-${PR_NUMBER}-dropdb"
+          disable_cloudfront() {
+            local stack_name="cms-eregs-eph-${PR_NUMBER}-static-assets"
+            local distribution_id
+            local config_file
+            local disabled_config_file
+            local etag
+            local state
+            local error_file
 
-          # Generate the stack names for this PR
-          ECFR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-ecfr-parser"
-          FR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-fr-parser"
-          MCP_SERVER_STACK="cms-eregs-eph-${PR_NUMBER}-api-mcp-server"
-          TEXT_EXTRACTOR_STACK="cms-eregs-eph-${PR_NUMBER}-text-extractor"
-          API_STACK="cms-eregs-eph-${PR_NUMBER}-api"
+            stack_state "${stack_name}"
+            state=$?
+            case "${state}" in
+              1)
+                echo "Static-assets stack already absent: ${stack_name}"
+                return 0
+                ;;
+              2)
+                return 1
+                ;;
+            esac
 
-          # Destroy ecfr-parser stack
-          echo "Destroying PR-specific stack: ${ECFR_PARSER_STACK}"
-          npx cdk destroy "${ECFR_PARSER_STACK}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/docker-lambdas.ts"
+            error_file=$(mktemp)
+            if ! distribution_id=$(retry aws cloudformation describe-stacks \
+              --stack-name "${stack_name}" \
+              --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue | [0]" \
+              --output text 2>"${error_file}"); then
+              record_failure "Read CloudFormation outputs ${stack_name}: $(tr '\n' ' ' <"${error_file}")"
+              rm -f "${error_file}"
+              return 1
+            fi
+            rm -f "${error_file}"
+            if [ -z "${distribution_id}" ] || [ "${distribution_id}" = "None" ]; then
+              echo "No CloudFront distribution output found for ${stack_name}"
+              return 0
+            fi
 
-          # Destroy fr-parser stack
-          echo "Destroying PR-specific stack: ${FR_PARSER_STACK}"
-          npx cdk destroy "${FR_PARSER_STACK}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/docker-lambdas.ts"
+            config_file=$(mktemp)
+            disabled_config_file=$(mktemp)
+            if ! retry aws cloudfront get-distribution-config --id "${distribution_id}" >"${config_file}"; then
+              record_failure "Read CloudFront distribution ${distribution_id}"
+              rm -f "${config_file}" "${disabled_config_file}"
+              return
+            fi
 
-          # Destroy mcp-server stack
-          echo "Destroying PR-specific stack: ${MCP_SERVER_STACK}"
-          npx cdk destroy "${MCP_SERVER_STACK}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/docker-lambdas.ts"
+            etag=$(jq -r '.ETag' "${config_file}")
+            if ! jq '.DistributionConfig.Enabled = false | .DistributionConfig' "${config_file}" >"${disabled_config_file}"; then
+              record_failure "Prepare CloudFront disablement ${distribution_id}"
+            elif ! retry aws cloudfront update-distribution \
+              --id "${distribution_id}" \
+              --distribution-config "file://${disabled_config_file}" \
+              --if-match "${etag}"; then
+              record_failure "Disable CloudFront distribution ${distribution_id}"
+            elif ! retry aws cloudfront wait distribution-deployed --id "${distribution_id}"; then
+              record_failure "Wait for CloudFront distribution ${distribution_id}"
+            fi
 
-          # Destroy api-stack stack
-          echo "Destroying PR-specific stack: ${API_STACK}"
-          npx cdk destroy "${API_STACK}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/docker-lambdas.ts"
-          # Destroy text-extractor stack
-          echo "Destroying PR-specific stack: ${TEXT_EXTRACTOR_STACK}"
-          npx cdk destroy "${TEXT_EXTRACTOR_STACK}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/text-extractor.ts"
-          echo "Cleanup completed for all Docker-based stacks"
-          popd
+            rm -f "${config_file}" "${disabled_config_file}"
+          }
 
-      - name: Cleanup Static Assets
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
-        run: |
-          pushd cdk-eregs
-          npm install
-          npm install fs-extra
-          npm install --save-dev @types/fs-extra
+          cleanup_bucket() {
+            local bucket_name="$1"
+            local error_file
 
-          # Disable the CloudFront distribution first
-          STATIC_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"
+            error_file=$(mktemp)
+            if ! retry aws s3api head-bucket --bucket "${bucket_name}" >/dev/null 2>"${error_file}"; then
+              if grep -qiE 'not found|no such bucket|404' "${error_file}"; then
+                echo "Bucket already absent: ${bucket_name}"
+              else
+                record_failure "Inspect S3 bucket ${bucket_name}: $(tr '\n' ' ' <"${error_file}")"
+              fi
+              rm -f "${error_file}"
+              return 0
+            fi
+            rm -f "${error_file}"
 
-          # Get distribution ID
-          DIST_ID=$(aws cloudformation describe-stacks --stack-name $STATIC_STACK --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue" --output text)
+            echo "Deleting bucket: ${bucket_name}"
+            if ! retry aws s3 rm "s3://${bucket_name}" --recursive || \
+              ! retry aws s3api delete-bucket --bucket "${bucket_name}"; then
+              record_failure "S3 bucket ${bucket_name}"
+            fi
+          }
 
-          if [ ! -z "$DIST_ID" ]; then
-            echo "Disabling CloudFront distribution $DIST_ID"
-            # Get current distribution config
-            aws cloudfront get-distribution-config --id $DIST_ID > dist-config.json
-            ETAG=$(cat dist-config.json | jq -r '.ETag')
+          invoke_dropdb
 
-            # Disable the distribution
-            cat dist-config.json | jq '.DistributionConfig.Enabled = false' | jq .DistributionConfig > dist-config-disabled.json
-            aws cloudfront update-distribution --id $DIST_ID --distribution-config file://dist-config-disabled.json --if-match $ETAG
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-redirect-api"
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-maintenance-api"
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-ecfr-parser"
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-fr-parser"
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-api-mcp-server"
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-api"
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-text-extractor"
 
-            # Wait for distribution to be disabled
-            echo "Waiting for distribution to be disabled..."
-            aws cloudfront wait distribution-deployed --id $DIST_ID
+          disable_cloudfront
+          destroy_stack "cms-eregs-eph-${PR_NUMBER}-static-assets"
+
+          cleanup_bucket "eregs-eph-${PR_NUMBER}-site-assets"
+          cleanup_bucket "eregs-eph-${PR_NUMBER}-cloudfront-logs"
+
+          if [ "${#failures[@]}" -gt 0 ]; then
+            echo "Ephemeral cleanup completed with failures:"
+            printf ' - %s\n' "${failures[@]}"
+            exit 1
           fi
 
-          # Now destroy the stack with force
-          npx cdk destroy $STATIC_STACK \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --exclusively \
-          --app "npx ts-node bin/static-assets.ts"
-
-          # Manually empty and delete buckets if they still exist
-          ASSETS_BUCKET="eregs-eph-$PR_NUMBER-site-assets"
-          LOGS_BUCKET="eregs-eph-$PR_NUMBER-cloudfront-logs"
-
-          for BUCKET in $ASSETS_BUCKET $LOGS_BUCKET; do
-            if aws s3api head-bucket --bucket $BUCKET 2>/dev/null; then
-              echo "Emptying and deleting bucket: $BUCKET"
-              aws s3 rm s3://$BUCKET --recursive
-              aws s3api delete-bucket --bucket $BUCKET
-            fi
-          done
-
-          popd
+          echo "Ephemeral cleanup completed successfully."
