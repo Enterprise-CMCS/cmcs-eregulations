@@ -9,6 +9,7 @@ updates:
     - package-ecosystem: "npm"
       # Look for `package.json` and `lock` files
       directories:
+        - "/" # Root linting/tooling
         - "/solution/ui/e2e" # Cypress tests
         - "/solution/ui/regulations" # Vitest, bundling
         - "/solution/ui/regulations/eregs-component-lib" # Django template components
@@ -70,6 +71,12 @@ updates:
         - "/solution/backend"
         - "/solution/text-extractor"
         - "/solution/mcp-server"
+        - "/solution/parsers" # Parser test dependencies
+        - "/solution/parsers/ecfr-launcher"
+        - "/solution/parsers/ecfr-worker"
+        - "/solution/parsers/fr-launcher"
+        - "/solution/parsers/fr-worker"
+        - "/solution/lambda-proxy"
       schedule:
           interval: "daily"
       open-pull-requests-limit: 1
