@@ -8,7 +8,7 @@ dependencies = [
     "beautifulsoup4==4.14.3",
     "boto3==1.42.24",
     "defusedxml==0.7.1",
-    "django==6.0.3",
+    "django==6.0.8",
     "django-cors-headers==4.9.0",
     "django-csp==4.0",
     "django-debug-toolbar==6.3.0",
@@ -16,7 +16,7 @@ dependencies = [
     "django-model-utils==5.0.0",
     "django-solo==2.5.1",
     "django-storages==1.14.6",
-    "djangorestframework==3.17.0",
+    "djangorestframework==3.18.2",
     "djangorestframework-simplejwt==5.5.1",
     "drf-spectacular==0.29.0",
     "httpx==0.28.1",
@@ -25,7 +25,7 @@ dependencies = [
     "pgvector==0.4.2",
     "psycopg2-binary==2.9.11",
     "requests==2.33.0",
-    "werkzeug==3.1.6",
+    "werkzeug==3.1.9",
 ]
 
 [tool.pytest.ini_options]
