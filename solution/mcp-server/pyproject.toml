@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = "==3.12.14"
 dependencies = [
     "beautifulsoup4==4.14.3",
-    "fastmcp==4.0.2",
+    "fastmcp==4.1.2",
     "mangum==0.21.0",
     "requests==2.33.0",
     "ruff==0.15.0",
