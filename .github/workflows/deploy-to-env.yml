@@ -250,8 +250,24 @@ jobs:
 
           MCP_SERVER_STACK="cms-eregs-${STAGE_NAME}-api-mcp-server"
 
-          npx cdk deploy $MCP_SERVER_STACK \
-          -c environment=${ENVIRONMENT} \
+          retry() {
+            local attempts=1
+            local max_attempts=3
+            local delay=10
+
+            until "$@"; do
+              if [ "${attempts}" -ge "${max_attempts}" ]; then
+                return 1
+              fi
+              echo "Command failed; retrying in ${delay}s (${attempts}/${max_attempts}): $*" >&2
+              sleep "${delay}"
+              attempts=$((attempts + 1))
+              delay=$((delay * 2))
+            done
+          }
+
+          retry npx cdk deploy "$MCP_SERVER_STACK" \
+          -c environment="${ENVIRONMENT}" \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
