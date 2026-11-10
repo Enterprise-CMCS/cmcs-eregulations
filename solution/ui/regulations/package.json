@@ -40,6 +40,10 @@
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.57.1"
   },
+  "overrides": {
+    "glob": "14.0.4",
+    "minimatch": "11.0.5"
+  },
   "msw": {
     "workerDirectory": "msw"
   }

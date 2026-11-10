@@ -3,14 +3,19 @@
     "eslint": "eslint"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "8.31.1",
-    "@typescript-eslint/parser": "8.31.1",
+    "@typescript-eslint/eslint-plugin": "8.72.2",
+    "@typescript-eslint/parser": "8.72.2",
     "@vitest/eslint-plugin": "1.1.44",
     "eslint": "9.33.0",
     "eslint-plugin-cypress": "4.3.0",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-vue": "10.11.1",
-    "typescript-eslint": "8.31.1",
+    "typescript-eslint": "8.72.2",
     "vue-eslint-parser": "10.4.1"
+  },
+  "overrides": {
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.1"
+    }
   }
 }
