@@ -72,7 +72,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'csp.middleware.CSPMiddleware',
-    'regulations.middleware.JsonErrors',
     'regulations.middleware.ProcessResponse',
     'regcore.middleware.HtmlApi',
 ]
