@@ -2,6 +2,9 @@ name: Run Gitleaks
 
 on: [ pull_request, push, workflow_dispatch ]
 
+permissions:
+  contents: read
+
 jobs:
   gitleaks-scan:
     runs-on: ubuntu-24.04
