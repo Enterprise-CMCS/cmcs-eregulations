@@ -12,10 +12,7 @@ on:
         description: "The Slack webhook URL for PR observer notifications"
         required: true
 
-permissions:
-  id-token: write
-  contents: read
-  actions: read
+permissions: {}
 
 jobs:
   notify-slack:
