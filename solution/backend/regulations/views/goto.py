@@ -5,7 +5,7 @@ from django.views.generic.base import RedirectView
 class GoToRedirectView(RedirectView):
 
     permanent = False
-    pattern_name = 'reader_view'
+    pattern_name = "reader_view"
 
     def get_redirect_url(self, *args, **kwargs):
         kwargs = self.request.GET.dict()
@@ -18,9 +18,9 @@ class GoToRedirectView(RedirectView):
         if kwargs.get("section") is not None and kwargs.get("section") != "":
             url_kwargs["section"] = kwargs.get("section")
 
-        citation = [url_kwargs["part"]]
+        url = reverse(self.pattern_name, kwargs=url_kwargs)
         if url_kwargs.get("section"):
-            citation.append(url_kwargs["section"])
+            citation = [url_kwargs["part"], url_kwargs["section"]]
+            url += "#" + "-".join(citation)
 
-        url = reverse(self.pattern_name, kwargs=url_kwargs) + "#" + "-".join(citation)
         return url
