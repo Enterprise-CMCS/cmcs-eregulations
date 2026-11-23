@@ -27,6 +27,7 @@ import {
     getTagContent,
     hasRegulationCitations,
     hasStatuteCitations,
+    isFullView,
     niceDate,
     PARAM_ENCODE_DICT,
     PARAM_VALIDATION_DICT,
@@ -1144,5 +1145,34 @@ describe("getFullComputedHeight", () => {
 
         // Clean up
         document.body.removeChild(mockElement);
+    });
+});
+
+describe("isFullView", () => {
+    afterEach(() => {
+        window.history.replaceState({}, "", "/");
+    });
+
+    it("returns true for /full/ and /full pathnames", () => {
+        expect(isFullView("/42/431/full/")).toBe(true);
+        expect(isFullView("/42/431/full")).toBe(true);
+        expect(isFullView("/dev/42/431/full/")).toBe(true);
+        expect(isFullView("/42/431/FULL/")).toBe(true);
+    });
+
+    it("returns false for non-full pathnames", () => {
+        expect(isFullView("/42/431/Subpart-A/")).toBe(false);
+        expect(isFullView("/42/431/")).toBe(false);
+        expect(isFullView("/42/431/full-text/")).toBe(false);
+        expect(isFullView("/42/431/full/extra/")).toBe(false);
+        expect(isFullView("")).toBe(false);
+    });
+
+    it("defaults to window.location.pathname when no pathname is passed", () => {
+        window.history.replaceState({}, "", "/42/431/full/");
+        expect(isFullView()).toBe(true);
+
+        window.history.replaceState({}, "", "/42/431/Subpart-A/");
+        expect(isFullView()).toBe(false);
     });
 });

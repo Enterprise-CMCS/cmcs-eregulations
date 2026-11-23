@@ -13,6 +13,7 @@ import {
     EventCodes,
     formatResourceCategories,
     getSectionsRecursive,
+    isFullView,
 } from "utilities/utils";
 
 import CollapseButton from "./CollapseButton.vue";
@@ -122,8 +123,6 @@ const parseHash = (locationHash) => {
         return "";
     }
 };
-
-const isFullView = () => /\/full\/?$/i.test(window?.location?.pathname || "");
 
 const getPartDictionary = async () => {
     if (isFullView()) {

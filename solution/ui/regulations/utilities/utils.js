@@ -831,6 +831,9 @@ const getCurrentSectionFromHash = (windowHash) => {
     return citations.slice(0, 2).join("-");
 };
 
+const isFullView = (pathname = window?.location?.pathname || "") =>
+    /\/full\/?$/i.test(pathname);
+
 /**
  * @param {Array<object>} sectionList - array of Table of Contents objects from getChildTOC
  * @returns {Array<string>} - array of section identifier numbers as strings
@@ -1032,6 +1035,7 @@ export {
     hasRegulationCitations,
     hasStatuteCitations,
     highlightText,
+    isFullView,
     MAX_QUERY_LENGTH,
     niceDate,
     PARAM_ENCODE_DICT,
