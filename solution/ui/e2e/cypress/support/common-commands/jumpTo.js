@@ -8,7 +8,7 @@ export const jumpToRegulationPart = ({ title, part }) => {
     cy.get("#jumpBtn").should("not.be.disabled").click();
     cy.url().should(
         "eq",
-        Cypress.config().baseUrl + `/${title}/${part}/full/#${part}`
+        Cypress.config().baseUrl + `/${title}/${part}/full/`
     );
 };
 
