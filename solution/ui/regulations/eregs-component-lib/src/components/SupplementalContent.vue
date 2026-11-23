@@ -123,7 +123,18 @@ const parseHash = (locationHash) => {
     }
 };
 
+const isFullView = () => /\/full\/?$/i.test(window?.location?.pathname || "");
+
 const getPartDictionary = async () => {
+    if (isFullView()) {
+        partDict.value[props.part] = {
+            title: props.title,
+            subparts: [],
+            sections: [],
+        };
+        return;
+    }
+
     const sections = await getChildTOC({
         apiUrl: props.apiUrl,
         title: props.title,
