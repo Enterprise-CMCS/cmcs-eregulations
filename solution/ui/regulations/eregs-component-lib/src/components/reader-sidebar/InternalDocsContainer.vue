@@ -7,6 +7,7 @@ import {
     EventCodes,
     formatResourceCategories,
     getCurrentSectionFromHash,
+    isFullView,
 } from "utilities/utils";
 
 import CollapseButton from "../CollapseButton.vue";
@@ -72,15 +73,16 @@ const internalDocuments = ref({
 const getDocuments = async ({ section, sort = "default" }) => {
     internalDocuments.value.loading = true;
 
-    const rawNodeList = JSON.parse(
-        document.getElementById("node_list").textContent
-    );
-
     let locationString;
 
     if (section) {
         locationString = `citations=${props.title}.${props.part}.${section}`;
+    } else if (isFullView()) {
+        locationString = `citations=${props.title}.${props.part}`;
     } else {
+        const rawNodeList = JSON.parse(
+            document.getElementById("node_list").textContent
+        );
         const sectionsClone = [...rawNodeList.sections];
         locationString = sectionsClone.reduce(
             (acc, currentSection) =>

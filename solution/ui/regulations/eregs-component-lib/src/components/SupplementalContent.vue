@@ -13,6 +13,7 @@ import {
     EventCodes,
     formatResourceCategories,
     getSectionsRecursive,
+    isFullView,
 } from "utilities/utils";
 
 import CollapseButton from "./CollapseButton.vue";
@@ -124,6 +125,15 @@ const parseHash = (locationHash) => {
 };
 
 const getPartDictionary = async () => {
+    if (isFullView()) {
+        partDict.value[props.part] = {
+            title: props.title,
+            subparts: [],
+            sections: [],
+        };
+        return;
+    }
+
     const sections = await getChildTOC({
         apiUrl: props.apiUrl,
         title: props.title,
